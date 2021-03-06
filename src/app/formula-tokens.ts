@@ -3,133 +3,120 @@ export interface IDictionary<T> {
 }
 
 export const Tokens: IDictionary<string[]> = {
-  empty: [
-    "QtdLan",
-    "QtdCad",
-    "QtdMov",
-    "TabLan",
-    "TabCad",
-    "Valor",
-    "Numerador",
-    "Denominador",
-    "HorasDia",
-    "Idade",
-    "QtdDepIR",
-    "SalMinNacional",
-    "SalMinRegional",
-    "AuxAlimentacao",
-    "IndTransporte",
-    "Limitador",
-    "AuxCreche",
-    "DedDep",
-    "DedApo",
-    "SomaGanhos",
-    "SomaDescontos",
-    "SomaRubricasComoGanhos",
-    "SomaRubricasComoDescontos",
-    "MaiorValorRubricas",
-    "SomaRubricasPorIndicativo",
-    "AplicaTabelaProgressiva",
-    "AplicaTabelaSimplesAliquota",
-    "AplicaTabelaSimplesValor",
-    "AplicaTabelaPrevidencia",
-    "IsentoIRRF",
-    "Aposentado"
-  ],
   numerico: [
-    "QtdLan",
-    "QtdCad",
-    "QtdMov",
-    "TabLan",
-    "TabCad",
-    "Valor",
-    "Numerador",
-    "Denominador",
-    "HorasDia",
-    "Idade",
-    "QtdDepIR",
-    "SalMinNacional",
-    "SalMinRegional",
-    "AuxAlimentacao",
-    "IndTransporte",
-    "Limitador",
-    "AuxCreche",
-    "DedDep",
-    "DedApo",
-    "SomaGanhos",
-    "SomaDescontos",
-    "SomaRubricasComoGanhos",
-    "SomaRubricasComoDescontos",
-    "MaiorValorRubricas",
-    "SomaRubricasPorIndicativo",
-    "AplicaTabelaProgressiva",
-    "AplicaTabelaSimplesAliquota",
-    "AplicaTabelaSimplesValor",
-    "AplicaTabelaPrevidencia"
+    'QtdLan',
+    'QtdCad',
+    'QtdMov',
+    'TabLan',
+    'TabCad',
+    'Valor',
+    'Numerador',
+    'Denominador',
+    'HorasDia',
+    'Idade',
+    'QtdDepIR',
+    'SalMinNacional',
+    'SalMinRegional',
+    'AuxAlimentacao',
+    'IndTransporte',
+    'Limitador',
+    'AuxCreche',
+    'DedDep',
+    'DedApo',
+    'SomaGanhos',
+    'SomaDescontos',
+    'SomaRubricasComoGanhos',
+    'SomaRubricasComoDescontos',
+    'MaiorValorRubricas',
+    'SomaRubricasPorIndicativo',
+    'AplicaTabelaProgressiva',
+    'AplicaTabelaSimplesAliquota',
+    'AplicaTabelaSimplesValor',
+    'AplicaTabelaPrevidencia'
   ],
-  logico: ["IsentoIRRF", "Aposentado"],
-  cjInd: ["CjIndLan", "CjIndCad"],
-  cjRub: ["CjRubLan[0..n]", "CjRubCad"],
-  periodo: ["FOLHA", "MES", "ANO"],
-  aritimeticos: ["+", "-", "*", "/", "%", "^", "\\", "#"],
-  relacionais: ["==", ">", ">=", "<", "<=", "!="],
-  logicos: ["&&", "!!", "!"],
-  agrupadorCjRub: ["||"],
-  agrupadorCjInd: ["||"]
+  logico: ['IsentoIRRF', 'Aposentado'],
+  cjInd: ['CjIndLan', 'CjIndCad'],
+  cjRub: ['CjRubLan[0..n]', 'CjRubCad'],
+  periodo: ['FOLHA', 'MES', 'ANO'],
+  aritmeticos: ['+', '-', '*', '/', '%', '^', '\\', '#'],
+  relacionais: ['==', '>', '>=', '<', '<=', '!='],
+  logicos: ['&&', '!!'],
+  negacao: ['!'],
+  agrupadorCjRub: ['||'],
+  agrupadorCjInd: ['||'],
+  se: ['?'],
+  senao: [':']
 };
 
-export const VariaveisArray = [
-  "QtdLan",
-  "QtdCad",
-  "QtdMov",
-  "TabLan",
-  "TabCad",
-  "Valor"
+export const IsArray = [
+  'QtdLan',
+  'QtdCad',
+  'QtdMov',
+  'TabLan',
+  'TabCad',
+  'Valor'
 ];
 
-export class OperConfig {
+export class RelationConfig {
   name: string;
   right: string;
   left?: string;
   result: string;
 }
 
-export const Operadores: OperConfig[] = [
+export const Relacoes: RelationConfig[] = [
   {
-    name: "aritmeticos",
-    right: "numerico",
-    left: "numerico",
-    result: "numerico"
+    name: 'negacao',
+    right: 'logico',
+    result: 'logico'
   },
   {
-    name: "relacionais",
-    right: "numerico",
-    left: "numerico",
-    result: "logico"
+    name: 'senao',
+    right: 'numerico',
+    left: 'numerico',
+    result: 'numerico'
   },
   {
-    name: "logicos",
-    right: "logico",
-    left: "logico",
-    result: "logico"
+    name: 'se',
+    right: 'numerico',
+    left: 'logico',
+    result: 'numerico'
   },
   {
-    name: "agrupadorCjRub",
-    right: "cjRub",
-    left: "cjRub",
-    result: "cjRub"
+    name: 'aritmeticos',
+    right: 'numerico',
+    left: 'numerico',
+    result: 'numerico'
   },
   {
-    name: "agrupadorCjInd",
-    right: "cjInd",
-    left: "cjInd",
-    result: "cjInd"
+    name: 'relacionais',
+    right: 'numerico',
+    left: 'numerico',
+    result: 'logico'
+  },
+  {
+    name: 'logicos',
+    right: 'logico',
+    left: 'logico',
+    result: 'logico'
+  },
+  {
+    name: 'agrupadorCjRub',
+    right: 'cjRub',
+    left: 'cjRub',
+    result: 'cjRub'
+  },
+  {
+    name: 'agrupadorCjInd',
+    right: 'cjInd',
+    left: 'cjInd',
+    result: 'cjInd'
   }
 ];
 
 export const ParametrosInstrucoes = {
-  DedDep: ["numerico"],
-  DedApo: ["numerico"],
+  DedDep: ['numerico'],
+  DedApo: ['numerico'],
   SomaGanhos: [],
   SomaDescontos: [],
   SomaRubricasComoGanhos: [],

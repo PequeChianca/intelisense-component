@@ -1,53 +1,87 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
-import { map, startWith } from "rxjs/operators";
-import { Operadores, Tokens } from "./formula-tokens";
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { IDictionary, Relacoes, RelationConfig, Tokens } from './formula-tokens';
 
 export interface User {
   name: string;
 }
 
+const whenEmpty = ['numerico', 'logico', 'negacao'];
 /**
  * @title Display value autocomplete
  */
 @Component({
-  selector: "autocomplete-display-example",
-  templateUrl: "autocomplete-display-example.html",
-  styleUrls: ["autocomplete-display-example.css"]
+  selector: 'autocomplete-display-example',
+  templateUrl: 'autocomplete-display-example.html',
+  styleUrls: ['autocomplete-display-example.css']
 })
 export class AutocompleteDisplayExample implements OnInit {
-  myControl = new FormControl();
-  actualGroup: string;
-
-  ngOnInit() {}
 
   mentionConfig = {
-    triggerChar: " ",
+    triggerChar: ' ',
     returnTrigger: true,
-    mentionSelect: a => this.select(a)
+    mentionSelect: (a: any) => this.select(a)
   };
+  myControl = new FormControl();
+
+  allowedGroups: string[] = whenEmpty;
+  public operation = '';
+  inIf = false;
+  inParentesis = false;
+  inBrackets = false;
+  existingArrays: IDictionary<number> = {};
+
+  ngOnInit() { }
+
 
   getItens(): string[] {
-    if (!this.actualGroup || this.actualGroup === "") {
-      return Tokens.empty;
-    } else {
-      return Tokens[this.actualGroup];
-    }
+    let allowedTokens: string[] = [];
+    this.allowedGroups.forEach(c => allowedTokens = allowedTokens.concat(Tokens[c]));
+    return allowedTokens;
   }
 
   select(arg: any) {
-    let valor = arg.label;
-    let keys = Object.keys(Tokens);
-    let grupo = keys.filter(
-      c => c !== "empty" && Tokens[c].some(a => a === valor)
+    const valor = arg?.label;
+    const keys = Object.keys(Tokens);
+
+    const grupo = keys.filter(
+      c => c !== 'empty' && Tokens[c].some(a => a === valor)
     )[0];
-    this.actualGroup = grupo;
+
+    this.allowedGroups = this.relationMap(grupo);
     console.log(grupo);
-    return arg.label;
+    return valor;
+  }
+
+  relationMap(grupo: string) {
+    let grupos: string[] = [];
+
+    Relacoes.forEach(c => grupos = grupos.concat(this.nextRelation(c, grupo)));
+
+    return grupos.length > 0 ? grupos : whenEmpty;
+  }
+
+  nextRelation(relation: RelationConfig, grupo: string): string[] {
+    if ((!this.inIf) && (relation.name === 'senao')) {
+      return [];
+    }
+    if (relation.name === grupo) {
+
+      if (relation.name === 'se') {
+        this.inIf = true;
+      }
+
+      this.operation = grupo;
+      return [relation.right];
+    } else {
+      this.operation = '';
+    }
+    if (relation.left === grupo) {
+      return [relation.name];
+    }
+    if ((relation.name === this.operation) && (relation.right === grupo)) {
+      return this.relationMap(relation.result);
+    }
+    return [];
   }
 }
-
-/**  Copyright 2020 Google LLC. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license */

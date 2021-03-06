@@ -1,15 +1,15 @@
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <mat-label>Assignee</mat-label>
-    <input
-      #multSelectInput
-      type="text"
-      matInput
-      [formControl]="myControl"
-      [mention]="getItens()"
-      [mentionConfig]="mentionConfig"
-    />
+    <input #multSelectInput type="text" matInput [formControl]="myControl" [mention]="getItens()"
+      [mentionConfig]="mentionConfig" />
   </mat-form-field>
+  <div>
+    <mat-label>{{operation}}</mat-label>
+  </div>
+  <div>
+    {{allowedGroups}}
+  </div>
 </form>
 
 <!-- Copyright 2020 Google LLC. All Rights Reserved.
